@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/mharoon1578/kodro">
-    <img src="../assets/kodro_bg.png" alt="Kodro - Getting Started" width="600">
+    <img src="../assets/kodro_bg.png" alt="Kodro - Getting Started" >
   </a>
 </p>
 
