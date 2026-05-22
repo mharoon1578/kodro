@@ -50,14 +50,14 @@ def write_file(path: Path, content: str, safe: bool = False) -> None:
             return
     ensure_dir(path.parent)
     temp_file = path.with_suffix(path.suffix + ".tmp")
-    with open(temp_file, "w") as f:
+    with open(temp_file, "w", encoding="utf-8") as f:
         f.write(content)
     temp_file.replace(path)
     console.print(f"[green]✓[/green] [dim]{path}[/dim]")
 
 def read_file(path: Path) -> str:
     """Read file contents."""
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
 def parse_xml_files(content: str) -> list[dict]:
@@ -255,8 +255,9 @@ def display_phase_complete(phase_name: str) -> None:
 
 def display_welcome_banner() -> None:
     """Display welcome banner."""
+    from kodro.constants import VERSION
     console.print("[bold cyan]" + KODRO_LOGO + "[/bold cyan]")
-    console.print("[bold green]🔨 Kodro v2.0.0 — One-command Spec-Driven Development[/bold green]")
+    console.print(f"[bold green]🔨 Kodro v{VERSION} — One-command Spec-Driven Development[/bold green]")
     console.print("[dim]Type `kodro --help` for commands[/dim]")
     console.print()
 

@@ -49,7 +49,8 @@ def test_write_file_atomic(tmp_path: Path) -> None:
     target = tmp_path / "nested" / "file.txt"
     write_file(target, "atomic content")
     assert target.exists()
-    assert target.read_text() == "atomic content"
+    assert target.read_text(encoding="utf-8") == "atomic content"
+
 
 
 def test_calculate_cost() -> None:

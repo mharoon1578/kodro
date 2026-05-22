@@ -2,6 +2,20 @@
 
 from __future__ import annotations
 
+import sys
+# Reconfigure stdout/stderr to use UTF-8 to prevent encoding crashes on Windows console
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
+
 from datetime import datetime, timezone
 from pathlib import Path
 

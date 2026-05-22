@@ -26,17 +26,19 @@
 
 ## 📦 Installation
 
+Install Kodro directly from PyPI:
+
 ```bash
 pip install kodro
 ```
 
-> [!NOTE]
-> Kodro v2.0.0 is in **beta** and not yet published to PyPI. For now, clone the repo and install locally:
-> ```bash
-> git clone https://github.com/mharoon1578/kodro.git
-> cd kodro
-> pip install -e ".[dev]"
-> ```
+Or for development / local installation:
+```bash
+git clone https://github.com/mharoon1578/kodro.git
+cd kodro
+pip install -e ".[dev]"
+```
+
 
 ---
 

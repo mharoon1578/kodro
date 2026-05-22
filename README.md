@@ -375,7 +375,7 @@ pytest tests/ -v
 
 ## Roadmap
 
-- [ ] PyPI package publication (v2.0.0)
+- [x] PyPI package publication (v2.0.0)
 - [ ] GitHub Pages documentation site
 - [ ] VS Code extension
 - [ ] Cost analytics dashboard

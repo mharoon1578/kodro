@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [2.0.1] — 2026-05-22
+### 🐛 Fixed
+- **Windows Encoding Errors** — Enforced UTF-8 encoding (`encoding="utf-8"`) for all file reads and writes.
+- **Terminal Rendering Crashes** — Reconfigured `sys.stdout` and `sys.stderr` to use UTF-8 on startup to prevent encoding errors on non-UTF-8 command prompts and PowerShell environments.
+- **Test Compatibility** — Added UTF-8 encoding support to file-reading operations in unit tests.
+
+
 ## [2.0.0] — 2026-05-22
 
 ### ✨ Added
