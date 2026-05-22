@@ -63,6 +63,9 @@ Transform natural language prompts into production software with an intelligent 
 > [!NOTE]
 > **Beta Software:** Kodro v2.0.0 is in active development. You may encounter bugs, incomplete features, or breaking changes. Please report issues at [GitHub Issues](https://github.com/mharoon1578/kodro/issues).
 
+> [!TIP]
+> **New to Kodro?** Start with the [Getting Started Guide](docs/getting-started.md). For detailed configuration options see [Configuration](docs/configuration.md). For a deep dive into the pipeline phases see [Pipeline](docs/pipeline.md).
+
 ---
 
 ## What is Kodro?
