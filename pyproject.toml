@@ -10,7 +10,7 @@ readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "Kodro Team", email = "team@kodro.dev"}
+    {name = "Muhammad Haroon", email = "mharoon1578@gmail.com"}
 ]
 keywords = ["cli", "ai", "agent", "spec-driven", "development"]
 classifiers = [
