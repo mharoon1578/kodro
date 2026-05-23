@@ -1,13 +1,3 @@
-
-if (typeof File === 'undefined') {
-  global.File = class File {
-    constructor(bits, name, options = {}) {
-      this.bits = bits;
-      this.name = name;
-      this.options = options;
-    }
-  };
-}
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Kodro Documentation',
