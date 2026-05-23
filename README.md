@@ -154,54 +154,38 @@ kodro init --integration opencode --framework react-typescript
 
 Kodro implements **Spec-Driven Development (SDD)** for AI agents:
 
+```mermaid
+journey
+    title Kodro Spec-Driven Development SDD Pipeline
+    section Phase 1 CLARIFY
+      Ask domain questions: 5: AI, User
+      Identify ambiguities: 4: AI, User
+      Capture user intent: 5: AI, User
+    section Phase 2 SPECIFY
+      Generate formal spec.md: 5: AI
+      Write BDD scenarios: 4: AI
+      Define DQI criteria: 4: AI, User
+    section GATEKEEPER 1
+      Review spec.md: 5: User
+    section Phase 3 PLAN
+      Decompose into tasks: 5: AI
+      Build dependency graph: 4: AI
+      Estimate complexity: 3: AI
+    section GATEKEEPER 2
+      Review tasks.md: 5: User
+    section Phase 4 IMPLEMENT
+      Execute tasks sequentially: 5: AI
+      Generate code and tests: 5: AI
+      Follow conventions: 4: AI
+    section Phase 5 VALIDATE
+      Run test suite: 5: AI
+      Self-heal failures 5 attempts: 4: AI
+      Verify specifications: 5: AI
+    section Phase 6 DELIVER
+      Generate run instructions: 5: AI
+      Document next steps: 4: AI
+      Report token costs: 3: AI
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 1: CLARIFY                                           │
-│  • Ask domain questions                                     │
-│  • Identify ambiguities                                     │
-│  • Capture user intent                                      │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 2: SPECIFY                                           │
-│  • Generate formal specification (spec.md)                  │
-│  • Write BDD scenarios (Given/When/Then)                    │
-│  • Define acceptance criteria (DQI ≥80%)                    │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-                   [GATEKEEPER: Review spec.md]
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 3: PLAN                                              │
-│  • Decompose into tasks                                     │
-│  • Build dependency graph                                   │
-│  • Estimate complexity                                      │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-                   [GATEKEEPER: Review tasks.md]
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 4: IMPLEMENT                                         │
-│  • Execute tasks in dependency order                        │
-│  • Generate code + tests                                    │
-│  • Follow framework conventions                             │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 5: VALIDATE                                          │
-│  • Run test suite                                           │
-│  • Self-heal failures (5 attempts)                          │
-│  • Verify specifications                                    │
-└─────────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 6: DELIVER                                           │
-│  • Generate run instructions                                │
-│  • Document next steps                                      │
-│  • Report token costs                                       │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ---
 
 ## Token Efficiency Architecture
