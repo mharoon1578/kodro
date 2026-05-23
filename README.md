@@ -80,24 +80,20 @@ Kodro is an **AI development framework** that transforms a single natural langua
 Unlike traditional AI coding tools that require multiple prompts and manual orchestration, Kodro collapses the entire software development lifecycle into one `/kodro` command—with built-in quality gates, formal specifications, and automated testing.
 
 **The pipeline:**
+```mermaid
+flowchart LR
 
-graph LR
-    A([Your Idea]) --> B["/kodro"]
-    B --> C[(P1 Clarify)]
-    C --> D[(P2 Specify)]
-    D --> G1{"[GATEKEEPER]"}
-    G1 -->|Approved| E[(P3 Plan)]
-    E --> G2{"[GATEKEEPER]"}
-    G2 -->|Approved| F[(P4 Implement)]
-    F --> H[(P5 Validate)]
-    H --> I[(P6 Deliver)]
-    I --> J[Production-Ready Code]
-
-    style G1 fill:#ff9999,stroke:#333,stroke-width:2px
-    style G2 fill:#ff9999,stroke:#333,stroke-width:2px
-    style J fill:#99ff99,stroke:#333,stroke-width:2px
-    style B fill:#99ccff,stroke:#333,stroke-width:2px
-
+A[Your Idea] --> B[\/kodro\]
+B --> C(P1 Clarify)
+C --> D(P2 Specify)
+D --> G1{GATEKEEPER}
+G1 -->|Approved| E(P3 Plan)
+E --> G2{GATEKEEPER}
+G2 -->|Approved| F(P4 Implement)
+F --> H(P5 Validate)
+H --> I(P6 Deliver)
+I --> J[Production-Ready Code]
+```
 At each **gatekeeper**, the AI agent pauses for your review. **Type "Continue"** to proceed. No code is written until Phase 4—the agent first clarifies your intent, writes a formal specification, and creates a dependency-aware task plan.
 
 ---
