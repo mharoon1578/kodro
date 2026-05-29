@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "kodro"
-version = "2.0.1"
+version = "2.0.2"
 description = "One-Command Spec-Driven Development Engine"
 readme = "README.md"
 license = {text = "MIT"}
