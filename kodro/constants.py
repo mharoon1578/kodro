@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-VERSION = "2.0.1"
+VERSION = "2.0.2"
 
 DEFAULT_OUTPUT_DIR = Path(".kodro")
 DEFAULT_STATE_FILE = Path(".kodro/state.json")
