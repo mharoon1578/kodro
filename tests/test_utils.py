@@ -56,7 +56,7 @@ def test_write_file_atomic(tmp_path: Path) -> None:
 def test_calculate_cost() -> None:
     cost = calculate_cost("gpt-4o", 1000, 500)
     assert cost > 0
-    assert cost == 12.5
+    assert cost == 0.0125
 
 
 def test_chunk_text_by_sections() -> None:

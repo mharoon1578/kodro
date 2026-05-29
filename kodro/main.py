@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+
 # Reconfigure stdout/stderr to use UTF-8 to prevent encoding crashes on Windows console
 if hasattr(sys.stdout, "reconfigure"):
     try:
@@ -24,39 +25,50 @@ from rich.console import Console
 from rich.syntax import Syntax
 from rich.table import Table
 
-from kodro.config import Framework, Integration, KodroConfig, PhaseState, PipelineState
+from kodro.config import Framework, Integration, KodroConfig, PhaseState
 from kodro.constants import (
     CONSTITUTION_DIR,
-    DEFAULT_OUTPUT_DIR,
-    DEFAULT_STATE_FILE,
     INTEGRATION_DIRS,
     INTEGRATION_FILES,
     PHASE_NAMES,
     SPEC_FILE,
     TASKS_FILE,
-    VERSION,
 )
 from kodro.state import StateManager
 from kodro.utils import (
+    display_error,
     display_file_tree,
-    display_gatekeeper,
-    display_phase_header,
     display_phase_complete,
+    display_phase_header,
     display_status_table,
     display_success,
     display_warning,
     display_welcome_banner,
     ensure_git_repo,
     format_constitution,
-    git_commit,
     write_file,
 )
+
+
+def _version_callback(value: bool) -> None:
+    if value:
+        from kodro.constants import VERSION
+        console = Console()
+        console.print(f"kodro {VERSION}")
+        raise typer.Exit()
 
 app = typer.Typer(
     name="kodro",
     help="Kodro — One-Command Spec-Driven Development Engine",
     add_completion=False,
 )
+
+@app.callback()
+def _main(
+    version: bool = typer.Option(False, "--version", "-V", callback=_version_callback, is_eager=True, help="Show version and exit."),
+) -> None:
+    pass
+
 console = Console()
 
 
@@ -179,7 +191,7 @@ After delivery, request changes by creating entries below:
 
     # Initialize state
     state_mgr = StateManager(config)
-    state = state_mgr.initialize_state(path, integration, framework)
+    state_mgr.initialize_state(path, integration, framework)
     display_success("State initialized")
 
     # Display tree
@@ -225,7 +237,6 @@ def plan(
         display_error(f"Spec not found: {spec_path}")
         raise typer.Exit(1)
 
-    content = spec_path.read_text(encoding="utf-8")
     tasks_md = f"""# Tasks — Auto-generated from spec.md
 <!-- Generated at {datetime.now(timezone.utc).isoformat()} -->
 
@@ -449,8 +460,17 @@ def changes(
     # Append change request to CHANGES.md
     changes_file = path / ".kodro" / "CHANGES.md"
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d")
+
+    # Count existing changes for NNN
+    existing_count = 0
+    if changes_file.exists():
+        content = changes_file.read_text(encoding="utf-8")
+        existing_count = content.count("## CHANGE-")
+    nnn = f"{existing_count + 1:03d}"
+    change_id = f"CHANGE-{timestamp}-{nnn}"
+
     change_entry = f"""
-    console.print(f"[dim]Example: /{state.integration.value} \"Implement change CHANGE-{timestamp}-001\"[/dim]")
+## {change_id}: {request}
 - **Status:** proposed
 - **Request:** {request}
 - **Scope:** TBD
@@ -460,16 +480,15 @@ def changes(
 """
 
     if changes_file.exists():
-        content = changes_file.read_text(encoding="utf-8")
         content = content.replace("## Active Changes", f"## Active Changes{change_entry}")
         write_file(changes_file, content)
     else:
-        write_file(changes_file, f"# Change Requests\n{change_entry}")
+        write_file(changes_file, f"# Change Requests\n\n## Active Changes{change_entry}\n\n## Completed Changes\n")
 
     display_success(f"Change request logged: {changes_file}")
     console.print("[dim]The agent will read this file when you request implementation.[/dim]")
     console.print("[bold cyan]Next:[/bold cyan] Use your AI agent to implement changes.")
-    console.print(f"[dim]Example: /{state.integration.value} \"Implement change CHANGE-{timestamp}-001\"[/dim]")
+    console.print(f"[dim]Example: /{state.integration.value} \"Implement change {change_id}\"[/dim]")
 
 
 @app.command()

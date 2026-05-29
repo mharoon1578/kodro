@@ -1,19 +1,17 @@
 from __future__ import annotations
-import os
+
 import re
 import subprocess
 from pathlib import Path
-from typing import Optional
 
+from rich import box
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.panel import Panel
+from rich.rule import Rule
 from rich.syntax import Syntax
 from rich.table import Table
 from rich.tree import Tree
-from rich import box
-from rich.rule import Rule
-from rich.text import Text
-from rich.markdown import Markdown
 
 console = Console()
 
@@ -28,12 +26,12 @@ KODRO_LOGO = """
 """
 
 PHASE_ASCII = {
-    "clarify": "❓ CLARIFY",
-    "specify": "📝 SPECIFY",
-    "architect": "🏛️  ARCHITECT",
-    "schedule": "📋 SCHEDULE",
-    "implement": "💻 IMPLEMENT",
-    "verify": "✅ VERIFY",
+    "clarification": "❓ CLARIFY",
+    "specification": "📝 SPECIFY",
+    "task planning": "📋 PLAN",
+    "implementation": "💻 IMPLEMENT",
+    "validation": "✅ VERIFY",
+    "delivery": "🚀 DELIVER",
 }
 
 def ensure_dir(path: Path) -> Path:
@@ -57,7 +55,7 @@ def write_file(path: Path, content: str, safe: bool = False) -> None:
 
 def read_file(path: Path) -> str:
     """Read file contents."""
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return f.read()
 
 def parse_xml_files(content: str) -> list[dict]:
@@ -80,8 +78,9 @@ def parse_checkbox_tasks(content: str) -> list[dict]:
     for i, match in enumerate(re.finditer(pattern, content)):
         bracket_content = match.group(1).strip()
         desc = match.group(2).strip()
-        completed = "x" in bracket_content
-        parallel = "P" in bracket_content
+        completed = "x" in bracket_content.lower()
+        parallel = "P" in bracket_content or "[P]" in desc or "[p]" in desc
+        desc = desc.replace("[P]", "").replace("[p]", "").strip()
         tasks.append({
             "id": f"T{i+1:03d}",
             "description": desc,
@@ -109,7 +108,7 @@ def get_file_tree(root: Path, max_depth: int = 3) -> str:
             lines.append(f"{indent}{icon} {path.name}")
     return "\n".join(lines)
 
-def run_command(cmd: list[str], cwd: Optional[Path] = None, timeout: int = 60) -> tuple[int, str, str]:
+def run_command(cmd: list[str], cwd: Path | None = None, timeout: int = 60) -> tuple[int, str, str]:
     """Run shell command safely."""
     try:
         result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout)
@@ -175,11 +174,7 @@ def chunk_text(text: str, max_chars: int = 2000) -> list[str]:
     current_len = 0
     for line in lines:
         line_len = len(line) + 1
-        if line.startswith("## ") and current:
-            chunks.append("\n".join(current))
-            current = [line]
-            current_len = line_len
-        elif current_len + line_len > max_chars and current:
+        if line.startswith("## ") and current or current_len + line_len > max_chars and current:
             chunks.append("\n".join(current))
             current = [line]
             current_len = line_len
@@ -287,7 +282,7 @@ def display_status_table(phases: list[dict], current_phase: int) -> None:
     table = Table(title="[bold cyan]📊 Pipeline Status[/bold cyan]", box=box.ROUNDED, border_style="cyan")
     table.add_column("Phase", style="white", width=15)
     table.add_column("Status", style="white", width=12)
-    status_colors = {"pending": "dim", "running": "yellow", "completed": "green", "failed": "red", "paused": "blue"}
+    status_colors = {"pending": "dim", "running": "yellow", "complete": "green", "failed": "red", "paused": "blue", "rolled_back": "red"}
     for i, phase in enumerate(phases):
         status = phase.get("status", "pending")
         color = status_colors.get(status, "white")
@@ -336,7 +331,7 @@ def display_self_heal_attempt(attempt: int, max_attempts: int, error: str) -> No
     err_text = f"[red]{error[:200]}[/red]..." if len(error) > 200 else f"[red]{error}[/red]"
     console.print(Panel(err_text, title="[bold red]Test Failure[/bold red]", border_style="red"))
 
-def display_test_result(passed: bool, exit_code: int, coverage: Optional[float] = None) -> None:
+def display_test_result(passed: bool, exit_code: int, coverage: float | None = None) -> None:
     """Display test result."""
     icon = "✅" if passed else "❌"
     style = "green" if passed else "red"

@@ -47,3 +47,4 @@ htmlcov/
 
 # Kodro state (local only)
 .kodro/state.json
+.mypy_cache/

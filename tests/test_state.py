@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from kodro.config import Framework, Integration, KodroConfig, PhaseState, PipelineState
+from kodro.config import Framework, Integration, KodroConfig, PhaseState
 from kodro.state import StateManager
 
 

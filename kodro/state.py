@@ -37,7 +37,7 @@ class StateManager:
         if not self.state_path.exists():
             return None
         try:
-            with open(self.state_path, "r", encoding="utf-8") as f:
+            with open(self.state_path, encoding="utf-8") as f:
                 raw = json.load(f)
             return self._deserialize(raw)
         except (json.JSONDecodeError, KeyError, TypeError):
@@ -97,7 +97,7 @@ class StateManager:
             return state
         to_rollback = min(phases, len(completed))
         for i in range(1, to_rollback + 1):
-            target = state.phases[-i]
+            target = completed[-i]
             target.status = "rolled_back"
             target.notes += f" [Rolled back at {datetime.now(timezone.utc).isoformat()}]"
         state.current_phase = max(0, state.current_phase - to_rollback)
