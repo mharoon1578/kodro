@@ -31,8 +31,8 @@
 
 | Phase | Name | Output | Gatekeeper | Token Budget |
 |:-----:|------|--------|:----------:|:-----------:|
-| **1** | ❓ Clarification | `clarifications.md` | No | 1K |
-| **2** | 📝 Specification | `spec.md` (BDD + ADR + DQI) | **✅ Yes** | 2K |
+| **1** | ❓ Clarification | `clarifications.md` | No (skippable¹) | 1K |
+| **2** | 📝 Specification | `spec.md` (BDD + ADR + DQI) | **✅ Yes** (skippable¹) | 2K |
 | **3** | 📋 Task Planning | `tasks.md` (graph + registry) | **✅ Yes** | 1.5K |
 | **4** | 💻 Implementation | `src/` | No | 3K |
 | **5** | ✅ Validation | `validation_report.md` | No | 2K |
@@ -46,6 +46,8 @@ Your Idea → [P1 Clarify] → [P2 Specify] → 🛡️ GATEKEEPER →
 ```
 
 No code is written until Phase 4. The agent first clarifies your intent, writes a formal specification, and creates a dependency-aware task plan.
+
+¹ P1/P2 gatekeepers are skipped when using `--quick` mode (v2.1.0+).
 
 ---
 
@@ -68,6 +70,16 @@ At **Phase 2 (Specification)** and **Phase 3 (Task Planning)**, the pipeline pau
 ```
 
 > **You MUST type "Continue"** — pressing Enter alone will not proceed.
+
+### ⏩ Skipping Gatekeepers with `--quick` (v2.1.0+)
+
+Use the `--quick` flag during init to bypass P1 (Clarification) and P2 (Specification) gatekeepers:
+
+```bash
+kodro init --quick --integration claude --framework python-fastapi
+```
+
+The pipeline starts directly at **Phase 3 (Task Planning)** using default spec templates. Recommended for experienced users who know their requirements upfront.
 
 ---
 

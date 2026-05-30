@@ -74,11 +74,33 @@ kodro init --framework python-fastapi
 
 ---
 
+## 🚀 Flexible Bootloader (v2.1.0+)
+
+No need to run `kodro init` first. The bootloader auto-detects your project and configures on the fly:
+
+```bash
+# Auto-detect and go
+kodro bootstrap
+
+# Specify framework + integration directly
+kodro bootstrap --framework rust-axum --integration cursor
+
+# Or run without any args — interactive prompts
+kodro
+```
+
+**Detection logic:**
+- Checks for existing `.kodro/state.json` → resumes pipeline
+- Scans project root for `package.json`, `pyproject.toml`, `go.mod`, etc. → infers framework
+- Prompts only for missing information
+
+---
+
 ## 🤖 Integration Options
 
 | Agent | Enum Value | Command | File Created |
 |-------|-----------|---------|-------------|
-| **OpenCode** | `opencode` | `/kodro` | `.opencode/commands/kodro.md` |
+| **OpenCode** | `opencode` | `/kodro` | `.opencode/rules/kodro.rule.md` |
 | **Claude** | `claude` | `$kodro` | `.claude/CLAUDE.md` |
 | **Cursor** | `cursor` | Auto-read | `.cursor/rules/kodro.mdc` |
 | **Copilot** | `copilot` | Context | `.github/prompts/kodro.prompt.md` |
