@@ -58,10 +58,15 @@ class PipelineState(BaseModel):
     git_commit_hash: str | None = None
     created_at: str = ""
     last_updated: str = ""
+    active_phases: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6])
 
     def can_resume(self) -> bool:
         """Determine if the pipeline can be resumed from current state."""
-        return self.current_phase > 0 and self.current_phase < 6
+        return self.current_phase > 0 and self.current_phase < max(self.active_phases)
+
+    def is_quick(self) -> bool:
+        """Check if running in quick mode (subset of phases)."""
+        return len(self.active_phases) < 6
 
     def get_completed_phases(self) -> list[PhaseState]:
         """Return phases marked as complete."""
@@ -83,6 +88,7 @@ class KodroConfig(BaseModel):
     chunk_size: int = 2000
     output_dir: Path = Path(".kodro")
     state_file: Path = Path(".kodro/state.json")
+    active_phases: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6])
 
     @field_validator("temperature")
     @classmethod

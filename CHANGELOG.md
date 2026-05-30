@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.1.0] — 2026-05-30
+
+### ✨ Added
+- **`--quick` / `-q` flag** — Skip to a 3-phase pipeline (Specify → Implement → Validate) for small projects like a weather app. Drops Clarification, Task Planning, and Delivery phases. See `kodro init --quick`.
+- **`active_phases` config** — `KodroConfig` and `PipelineState` now support `active_phases: list[int]`. Quick mode sets `[2, 4, 5]`, full pipeline uses `[1, 2, 3, 4, 5, 6]`.
+
+### 🔧 Changed
+- **Bootloader v2.3** — Complete redesign inspired by GitHub Spec Kit's approach. The template is now guidance-oriented, not rigid:
+  - Removed "ABSOLUTE RULES" / "NEVER" constraints that prevented interactive Q&A
+  - Added **interactive Q&A pattern** with recommended options and multiple-choice format (like spec-kit's clarify command)
+  - Added **subagent handoffs** table — explicit handoff points between phases with `EXECUTE_COMMAND:` syntax
+  - Added **progress tracking** — AI maintains a todo checklist and updates it during execution
+  - Added **"You ARE an assistant"** guidance — AI can freely ask questions, adapt, delegate, and update todos
+- **Kernel v2.1** — Renamed from "Protocol-Strict" to "Adaptive" mode. Replaced "ABSOLUTE RULES" with "GUIDELINES". Added subagent and progress tracking notes.
+- **Phase templates** — All 6 phase modules rewritten to use "Goal" / "How" format instead of rigid rules. Each now includes subagent handoff suggestions and progress tracking hints.
+
 ## [2.0.3] — 2026-05-29
 
 ### ✨ Added

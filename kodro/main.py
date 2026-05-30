@@ -3,18 +3,15 @@
 from __future__ import annotations
 
 import sys
+from contextlib import suppress
 
 # Reconfigure stdout/stderr to use UTF-8 to prevent encoding crashes on Windows console
 if hasattr(sys.stdout, "reconfigure"):
-    try:
+    with suppress(Exception):
         sys.stdout.reconfigure(encoding="utf-8")
-    except Exception:
-        pass
 if hasattr(sys.stderr, "reconfigure"):
-    try:
+    with suppress(Exception):
         sys.stderr.reconfigure(encoding="utf-8")
-    except Exception:
-        pass
 
 
 from datetime import datetime, timezone
@@ -82,6 +79,7 @@ def init(
     ),
     path: Path = typer.Option(Path("."), "--path", "-p", help="Project directory"),
     git: bool = typer.Option(True, "--git/--no-git", help="Enable Git integration"),
+    quick: bool = typer.Option(False, "--quick", "-q", help="Quick mode: skip phases for small projects"),
 ) -> None:
     """Initialize a Kodro project with modular token-efficient constitution."""
     display_welcome_banner()
@@ -191,7 +189,7 @@ After delivery, request changes by creating entries below:
 
     # Initialize state
     state_mgr = StateManager(config)
-    state_mgr.initialize_state(path, integration, framework)
+    state_mgr.initialize_state(path, integration, framework, quick=quick)
     display_success("State initialized")
 
     # Display tree
@@ -210,6 +208,12 @@ After delivery, request changes by creating entries below:
     table.add_row("Total/turn", "~1060", "vs ~6750 monolithic")
     table.add_row("Savings", "84%", "Differential updates + refs")
     console.print(table)
+
+    if quick:
+        console.print("\n[bold yellow]⚡ Quick mode:[/bold yellow] Phases: [2]Specify → [4]Implement → [5]Validate")
+        console.print("[dim]Clarification, Planning, Delivery skipped.[/dim]")
+    else:
+        console.print("\n[bold cyan]Full pipeline:[/bold cyan] 6 phases (use --quick for small projects)")
 
     console.print(f"\n[bold cyan]Next:[/bold cyan] Use your AI agent with the `/{integration.value}` command.")
     console.print(f"[dim]Example: /{integration.value} \"Build a REST API with {framework.value}\"[/dim]")
@@ -297,7 +301,7 @@ def status(
 
     if state.can_resume():
         console.print(f"\n[bold yellow]→ Pipeline can resume from Phase {state.current_phase + 1}[/bold yellow]")
-    elif state.current_phase >= 6:
+    elif state.current_phase >= max(state.active_phases):
         console.print("\n[bold green]✓ Pipeline complete[/bold green]")
 
 
@@ -453,7 +457,7 @@ def changes(
         display_error("No Kodro project found. Run `kodro init` first.")
         raise typer.Exit(1)
 
-    if state.current_phase < 6:
+    if state.current_phase < max(state.active_phases):
         display_warning("Project not yet delivered. Complete pipeline first.")
         raise typer.Exit(1)
 

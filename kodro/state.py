@@ -62,15 +62,17 @@ class StateManager:
             raw["phases"] = [PhaseState(**p) for p in raw["phases"]]
         return PipelineState(**raw)
 
-    def initialize_state(self, project_path: Path, integration: Any, framework: Any) -> PipelineState:
+    def initialize_state(self, project_path: Path, integration: Any, framework: Any, *, quick: bool = False) -> PipelineState:
         """Create fresh pipeline state."""
         now = datetime.now(timezone.utc).isoformat()
+        active_phases = [2, 4, 5] if quick else [1, 2, 3, 4, 5, 6]
         state = PipelineState(
             project_path=project_path,
             integration=integration,
             framework=framework,
             created_at=now,
             last_updated=now,
+            active_phases=active_phases,
         )
         self.save(state)
         return state
